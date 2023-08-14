@@ -49,8 +49,7 @@ end
 Replace 'password' with a password.
 
 4. Start the Vagrant Boxes:
-vagrant up
-This command will start both the frontend and backend boxes, install the necessary software, and set up the database.
+vagrant up - This command will start both the frontend and backend boxes, install the necessary software, and set up the database.
 
 5. Connect Frontend to Backend:
 SSH into the frontend box:
