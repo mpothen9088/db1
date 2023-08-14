@@ -9,9 +9,8 @@ This guide will help set up the Event Management System using Vagrant with a fro
 
 1. Clone the Repository:
 git clone https://github.com/PuneethReddyHC/event-management.git
-cd event-management
-
-2. Initialize Vagrant:
+2. cd event-management
+3. Initialize Vagrant:
 Inside the project directory, create a Vagrantfile with the following content:
 
 Vagrant.configure("2") do |config|
