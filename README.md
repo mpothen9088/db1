@@ -1,124 +1,80 @@
-# Project: persistence-service
+# Event Management System with Vagrant
+This guide will help set up the Event Management System using Vagrant with a frontend running on Fedora and a backend database on Ubuntu, accessible from local machine.
 
-## Goal
+# Prerequisites:
+VirtualBox
+Vagrant
+Git
 
-This project is here to demonstrate various topics covered in SENG8070. There
-are many branches in this project and each of them will cover a different topic.
+# Setup:
 
-## Getting started
+1. Clone the Repository:
+bash
+Copy code
+git clone https://github.com/PuneethReddyHC/event-management.git
+cd event-management
 
-### Requirements
+2. Initialize Vagrant:
+Inside the project directory, create a Vagrantfile with the following content:
 
-You will need NPM and Node installed on your local machine. It is highly
-recommended that you use a environment manager. The environment manager will
-prevent pollution of your local system.
+Vagrant.configure("2") do |config|
 
-#### Quickest Way
+  config.vm.define "frontend" do |frontend|
+    frontend.vm.box = "generic/fedora33"
+    frontend.vm.network "private_network", type: "dhcp"
+    frontend.vm.network "forwarded_port", guest: 80, host: 8080
+    frontend.vm.provision "shell", inline: <<-SHELL
+      sudo dnf -y update
+      sudo dnf -y install httpd php php-mysqlnd git
+      sudo systemctl enable httpd
+      sudo systemctl start httpd
+      git clone https://github.com/PuneethReddyHC/event-management.git /var/www/html/
+      sudo chown -R apache:apache /var/www/html/
+    SHELL
+  end
 
-This can take some time to setup and understand how to use. For the quickest
-start, navigate to the [Download Page of Nodejs](https://nodejs.org/en/download/),
-download the correct package for your system, and install.
+  config.vm.define "db" do |db|
+    db.vm.box = "ubuntu/bionic64"
+    db.vm.network "private_network", type: "dhcp"
+    db.vm.provision "shell", inline: <<-SHELL
+      sudo apt update
+      sudo apt install -y mysql-server
+      sudo systemctl enable mysql
+      sudo systemctl start mysql
+      sudo mysql -u root -e "CREATE DATABASE event_management;"
+      sudo mysql -u root -e "CREATE USER 'event_user'@'%' IDENTIFIED BY 'password';"
+      sudo mysql -u root -e "GRANT ALL PRIVILEGES ON event_management.* TO 'event_user'@'%';"
+      sudo mysql -u root -e "FLUSH PRIVILEGES;"
+    SHELL
+  end
 
-#### Industry Standard Way
+end
 
-##### Linux/macOs
+Replace 'password' with a password.
 
-I highly recommend [NVM](https://github.com/nvm-sh/nvm).
-Read about the details on the NVM project page.
+3. Start the Vagrant Boxes:
+vagrant up
+This command will start both the frontend and backend boxes, install the necessary software, and set up the database.
 
-###### Windows
+4. Connect Frontend to Backend:
+SSH into the frontend box:
+vagrant ssh frontend
+Navigate to the Web Root: cd /var/www/html/
+Modify the PHP Project's Database Configuration:
+nano config.php
 
-Setting up development for Windows is a little bit more complicated. There are
-three (3) pieces of technology you will most likely need:
+Update the Database Connection Details to match the details of setup.
 
-1. terminal
-2. SSH
-3. git
+vagrant ssh-config db
 
-For the terminal, I would recommend zsh or bash. Here is a tutorial on [setting
-up zsh on your Windows Machine](https://dev.to/zinox9/installing-zsh-on-windows-37em).
+Database Name: Set it to event_management.
 
-On top of that, you will likely need to setup [SSH](https://docs.microsoft.com/en-us/windows/terminal/tutorials/ssh)
-and [git](https://git-scm.com/download/win). Please consult the documentation
-I've linked above to set those pieces of technology up.
+Username: Set it to event_user.
 
-After that, the Environment Manager I recommend for Windows is [nvm-windows](https://github.com/coreybutler/nvm-windows).
+Password: Set it to the password 'password'
 
-### Starting Development
+After making these changes in the configuration file, save and close it.
 
-Validate that you have Node and NPM:
-
-```bash
-node -v
-```
-
-```bash
-npm -v
-```
-
-If you have them installed, you will be given the version number.
-
-Install the required dependencies:
-
-```bash
-npm install
-```
-
-Start the development environment:
-
-```bash
-npm start
-```
-
-### Tests
-
-Run tests with:
-
-```bash
-npm run test
-```
-
-#### Docker & docker-compose
-
----
-
-The [official website](https://docs.docker.com/get-docker/) contains instructions
-for all operating systems.
-
-in most cases, compose (docker-compose) comes with the Docker installation.
-However, if you're looking for a different version or troubleshooting tips, you
-can head to the [official documentation for compose](https://docs.docker.com/compose/install/).
-
-### Starting Development
-
-Validate that you have Node and NPM:
-
-```bash
-node -v
-```
-
-```bash
-npm -v
-```
-
-### Using docker compose
-
-These commands are to be ran in the docker compose directory.
-
-#### Build the Image
-
-```bash
-docker-compose build
-```
-
-#### Run the image
-
-```bash
-docker-compose up -d
-```
-
-#### Build and Run the image
-
-```bash
-docker-compose up -d --build
-```
+5. Access the Web App:
+Access the PHP web app from local machine by opening a browser and navigating to:
+http://localhost:8080
