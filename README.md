@@ -2,9 +2,8 @@
 This guide will help set up the Event Management System using Vagrant with a frontend running on Fedora and a backend database on Ubuntu, accessible from local machine.
 
 # Prerequisites:
-VirtualBox
-Vagrant
-Git
+1.VirtualBox
+2.Vagrant
 
 # Setup:
 
