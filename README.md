@@ -48,11 +48,11 @@ end
 
 Replace 'password' with a password.
 
-3. Start the Vagrant Boxes:
+4. Start the Vagrant Boxes:
 vagrant up
 This command will start both the frontend and backend boxes, install the necessary software, and set up the database.
 
-4. Connect Frontend to Backend:
+5. Connect Frontend to Backend:
 SSH into the frontend box:
 vagrant ssh frontend
 Navigate to the Web Root: cd /var/www/html/
