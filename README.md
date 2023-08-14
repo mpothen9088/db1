@@ -54,11 +54,11 @@ vagrant up - This command will start both the frontend and backend boxes, instal
 5. Connect Frontend to Backend:
 SSH into the frontend box:
 vagrant ssh frontend
-Navigate to the Web Root: cd /var/www/html/
-Modify the PHP Project's Database Configuration:
+6. Navigate to the Web Root: cd /var/www/html/
+7. Modify the PHP Project's Database Configuration:
 nano config.php
 
-Update the Database Connection Details to match the details of setup.
+8. Update the Database Connection Details to match the details of setup.
 
 vagrant ssh-config db
 
@@ -70,6 +70,6 @@ Password: Set it to the password 'password'
 
 After making these changes in the configuration file, save and close it.
 
-5. Access the Web App:
+9. Access the Web App:
 Access the PHP web app from local machine by opening a browser and navigating to:
 http://localhost:8080
