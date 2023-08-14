@@ -8,8 +8,6 @@ This guide will help set up the Event Management System using Vagrant with a fro
 # Setup:
 
 1. Clone the Repository:
-bash
-Copy code
 git clone https://github.com/PuneethReddyHC/event-management.git
 cd event-management
 
